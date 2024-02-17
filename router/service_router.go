@@ -20,6 +20,8 @@ func NewRouter(engine *gin.Engine, prefix string) *Router {
 }
 
 func (r *Router) Register(endpoints Endpoints) {
+	r.engine.Handle(http.MethodGet, "/", Index)
+
 	for method, endpointList := range endpoints {
 		r.register(method, endpointList)
 	}
