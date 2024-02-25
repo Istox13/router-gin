@@ -14,18 +14,24 @@ type Router struct {
 }
 
 func NewRouter(engine *gin.Engine, prefix string) *Router {
-	return &Router{
+	router := &Router{
 		engine: engine,
 		prefix: prefix,
 	}
+
+	router.engine.Handle(http.MethodGet, "/", Index)
+
+	return router
 }
 
 func (r *Router) Register(endpoints Endpoints) {
-	r.engine.Handle(http.MethodGet, "/", Index)
-
 	for method, endpointList := range endpoints {
 		r.register(method, endpointList)
 	}
+}
+
+func (r *Router) AddHealthcheckURL(url string) {
+	r.engine.Handle(http.MethodGet, url, Index)
 }
 
 func (r *Router) register(method string, endpoints EndpointsList) {
